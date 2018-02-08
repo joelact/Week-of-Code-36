@@ -35,16 +35,21 @@ def driveDiagonal(board, pawn, bKing):
     if pawn[1] == 7:
         for i in range(6, -1, -1):
             if bKing[0] == i and bKing[1] == i:
+                return True  
+    
+    for i in range(8):
+        point = [i, pawn[1] - i]
+        if point[1] >= 0:
+            if point[0] == bKing[0] and point[1] == bKing[1]:
                 return True
     
-    
-    
+    for i in range(8):
+        point = [i, pawn[1] + i]
+        if point[1] <= 7:
+            if point[0] == bKing[0] and point[1] == bKing[1]:
+                return True
 
-
-
-
-
-
+    return False
 
 def checkQueen(board, pawn, bKing):
     #checks horizontal
@@ -53,8 +58,39 @@ def checkQueen(board, pawn, bKing):
     #checks vertical
     if pawn[1] == bKing[1]:
         return True
+    
+    return driveDiagonal(board, pawn, bKing)
 
 def checkKnight(board, pawn, bKing):
+
+    y = pawn[0] + 1
+    x = pawn[1] - 2
+
+    if x >= 0:
+        if bKing[0] == y and bKing[1] == x:
+            return True
+    
+    y = pawn[0] + 2
+    x = pawn[0] - 1
+
+    if x >= 0:
+        if bKing[0] == y and bKing[1] == x:
+            return True
+    
+    y = pawn[0] + 1
+    x = pawn[1] + 2
+
+    if x < 8:
+        if bKing[0] == y and bKing[1] == x:
+            return True
+    
+    y = pawn[0] + 2
+    x = pawn[0] + 1
+
+    if x < 8:
+        if bKing[0] == y and bKing[1] == x:
+            return True
+
     return False
 
 
@@ -73,9 +109,11 @@ def waysToGiveACheck(board):
     pawn[0] = 0
 
     #check the queen
-    if checkQueen:
+    if checkQueen(board, pawn, bKing):
         return 2
-    if checkKnight:
+    
+    #check the knight
+    if checkKnight(board, pawn, bKing):
         return 1
     
     return 0
